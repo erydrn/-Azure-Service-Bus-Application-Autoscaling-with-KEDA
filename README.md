@@ -4,7 +4,7 @@
 
 <ol>
 <li>
-We have to install KEDA in the Kubernetes cluster by using Helm Chart
+Install KEDA and add to our helm chart repo
 <br>
 <a href="https://github.com/kedacore/charts">Keda Install Helm Chart</a>
 <pre>
