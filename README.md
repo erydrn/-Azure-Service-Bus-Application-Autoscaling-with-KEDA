@@ -7,6 +7,7 @@
 $ helm repo add kedacore https://kedacore.github.io/charts
 "kedacore" has been added to your repositories
 ```
+You can find the latest releases [here](https://github.com/kedacore/charts/releases)
 
 ### Browse all our Helm charts
 ```
