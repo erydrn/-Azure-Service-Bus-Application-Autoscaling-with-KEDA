@@ -1,0 +1,61 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: trigger-auth-service-bus-orders
+spec:
+  secretTargetRef:
+  - parameter: connection
+    name: order-secrets
+    key: SERVICEBUS_TOPIC_CONNECTIONSTRING
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-processor
+  labels:
+    app: order-processor
+spec:
+  selector:
+    matchLabels:
+      app: order-processor
+  template:
+    metadata:
+      labels:
+        app: order-processor
+    spec:
+      containers:
+      - name: order-processor
+        image: nginx
+        imagePullPolicy: Always
+        env:
+        - name: KEDA_SERVICEBUS_TOPIC_CONNECTIONSTRING
+          valueFrom:
+            secretKeyRef:
+             name: order-secrets
+             key: SERVICEBUS_TOPIC_CONNECTIONSTRING
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: order-processor-scaler
+  labels:
+    app: order-processor
+    deploymentName: order-processor
+spec:
+  scaleTargetRef:
+    name: order-processor
+  # minReplicaCount: 0 Change to define how many minimum replicas you want
+  minReplicaCount: 0
+  cooldownPeriod: 30
+  pollingInterval: 5
+  maxReplicaCount: 10
+  triggers:
+  - type: azure-servicebus
+    authenticationRef:
+      name: trigger-auth-service-bus-orders
+    metadata:
+      queueName: queueone
+      #topicName: orders
+      #subscriptionName: sbtopic-sub1
+      connection: KEDA_SERVICEBUS_TOPIC_CONNECTIONSTRING
+      queueLength: '5'
