@@ -14,7 +14,7 @@ We have to install KEDA in the Kubernetes cluster by using Helm Chart
 <pre>
 $ helm search repo kedacore/
 NAME            CHART VERSION   APP VERSION     DESCRIPTION
-kedacore/keda	  2.0.1        	  2.0.0      	    Event-based autoscaler for workloads on Kubernetes
+kedacore/keda	2.0.1        	2.0.0      	Event-based autoscaler for workloads on Kubernetes
 </pre>
 </li>
 <li>We need to create Trigger Authentication Object to connect Service Bus</li>
