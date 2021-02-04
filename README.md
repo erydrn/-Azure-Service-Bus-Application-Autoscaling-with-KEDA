@@ -1,4 +1,4 @@
-# -Azure-Service-Bus-Application-Autoscaling-with-KEDA
+# Application Autoscaling with KEDA by listening Azure Service Bus Message Queue/Topics 
 
 1 - We need to install keda into the cluster by using Helm Chart
 https://github.com/kedacore/charts
