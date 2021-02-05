@@ -59,6 +59,18 @@ resources:
   ```
   kubectl create -f secret.yaml
   ```
+  ### Create Trigger Authentication Object to let KEDA access the Service Bus Queue/Topic with the Connection String defined in secret and pulled from environment variable in application deployment object
+  ```
+  apiVersion: keda.sh/v1alpha1
+  kind: TriggerAuthentication
+  metadata:
+    name: trigger-auth-service-bus-orders
+  spec:
+    secretTargetRef:
+    - parameter: connection
+      name: order-secrets
+      key: SERVICEBUS_TOPIC_CONNECTIONSTRING
+  ```
   ### Create deployment object for the application in AKS
   ```
   apiVersion: apps/v1
