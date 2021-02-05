@@ -54,7 +54,7 @@ resources:
     labels:
       app: order-processor
   data:
-    SERVICEBUS_TOPIC_CONNECTIONSTRING: <Encoded Base64 Service Bus Topic/Queue Connection String>
+    SERVICEBUS_TOPIC_CONNECTIONSTRING: {Encoded Base64 Service Bus Topic/Queue Connection String}
   ```
   ```
   kubectl create -f secret.yaml
