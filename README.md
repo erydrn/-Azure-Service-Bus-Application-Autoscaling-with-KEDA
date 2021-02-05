@@ -43,6 +43,9 @@ resources:
  helm install keda kedacore/keda -n keda -f values.yaml
   ```
  ### Create secret object in AKS and set Service Bus Topic/Queue Connection String
+ 
+ ![Image of Service Bus Topic Portal](https://github.com/erydrn/Azure-Service-Bus-Application-Autoscaling-with-KEDA/blob/main/images/ServiceBusQueueConnString.png)
+ 
   ```
  apiVersion: v1
   kind: Secret
