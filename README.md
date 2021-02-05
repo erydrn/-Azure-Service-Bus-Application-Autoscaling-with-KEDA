@@ -41,13 +41,13 @@ resources:
  ```
  kubectl create ns keda
  helm install keda kedacore/keda -n keda -f values.yaml
-  ```
+ ```
  ### Create secret object in AKS and set Service Bus Topic/Queue Connection String
  
  ![Image of Service Bus Topic Portal](https://github.com/erydrn/Azure-Service-Bus-Application-Autoscaling-with-KEDA/blob/main/images/ServiceBusQueueConnString.png)
  
   ```
- apiVersion: v1
+  apiVersion: v1
   kind: Secret
   metadata:
     name: order-secrets
@@ -55,4 +55,61 @@ resources:
       app: order-processor
   data:
     SERVICEBUS_TOPIC_CONNECTIONSTRING: <Encoded Base64 Service Bus Topic/Queue Connection String>
- ```
+  ```
+  ```
+  kubectl create -f secret.yaml
+  ```
+  ### Create deployment object for the application in AKS
+  ```
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: order-processor
+    labels:
+      app: order-processor
+  spec:
+    selector:
+      matchLabels:
+        app: order-processor
+    template:
+      metadata:
+        labels:
+          app: order-processor
+      spec:
+        containers:
+        - name: order-processor
+          image: nginx
+          imagePullPolicy: Always
+          env:
+          - name: KEDA_SERVICEBUS_TOPIC_CONNECTIONSTRING
+            valueFrom:
+              secretKeyRef:
+                name: order-secrets
+                key: SERVICEBUS_TOPIC_CONNECTIONSTRING
+   ```
+   ### Create scaled object to set autocaling rules for KEDA in AKS
+   ```
+    apiVersion: keda.sh/v1alpha1
+    kind: ScaledObject
+    metadata:
+      name: order-processor-scaler
+      labels:
+        app: order-processor
+        deploymentName: order-processor
+    spec:
+      scaleTargetRef:
+        name: order-processor
+      minReplicaCount: 0
+      cooldownPeriod: 30
+      pollingInterval: 5
+      maxReplicaCount: 10
+      triggers:
+      - type: azure-servicebus
+        authenticationRef:
+          name: trigger-auth-service-bus-orders
+        metadata:
+          queueName: queueone
+          #topicName: orders
+          #subscriptionName: sbtopic-sub1
+          connection: KEDA_SERVICEBUS_TOPIC_CONNECTIONSTRING
+          queueLength: '5'
