@@ -87,7 +87,7 @@ resources:
                 name: order-secrets
                 key: SERVICEBUS_TOPIC_CONNECTIONSTRING
    ```
-   ### Create scaled object to set autocaling rules for KEDA in AKS
+   ### Create scaled object to set autoscaling rules for KEDA in AKS
    ```
     apiVersion: keda.sh/v1alpha1
     kind: ScaledObject
