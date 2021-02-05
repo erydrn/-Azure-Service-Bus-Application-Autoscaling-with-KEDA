@@ -1,6 +1,8 @@
 # Application Autoscaling with KEDA by listening Azure Service Bus Message Queue/Topics 
 
 ## Getting Started
+You can also find KEDA documentation [here](https://keda.sh/docs/2.1/scalers/azure-service-bus/) to create the solution
+
 ### Adding our Helm chart repo
 
 ```console
