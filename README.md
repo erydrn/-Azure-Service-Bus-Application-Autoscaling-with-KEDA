@@ -42,3 +42,14 @@ resources:
  kubectl create ns keda
  helm install keda kedacore/keda -n keda -f values.yaml
   ```
+ ### Create secret object in AKS and set Service Bus Topic/Queue Connection String
+  ```
+ apiVersion: v1
+  kind: Secret
+  metadata:
+    name: order-secrets
+    labels:
+      app: order-processor
+  data:
+    SERVICEBUS_TOPIC_CONNECTIONSTRING: <Encoded Base64 Service Bus Topic/Queue Connection String>
+ ```
